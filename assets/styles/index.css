@@ -25,7 +25,8 @@ h2 {
     font-size: 3.2rem;
     font-weight: 800;
     color: #fff;
-    text-transform: uppercase;
+    text-shadow: #202020 1px 1px;
+    
 }
 
 .contact-input {
@@ -67,7 +68,7 @@ h2 {
 }
 
 .invalid {
-    border: 2px solid red;
+    border: 0.1rem solid #730000;
 }
 
 .add-button {
@@ -94,19 +95,20 @@ h2 {
 
 .count {
     position: fixed;
-    bottom: 0;
-    right: 0;
+    bottom: 5rem;
+    right: 5rem;
     padding: 1rem;
     font-size: 1.2rem;
 }
 
 #count {
+    width: 100%;
     color: #fff;
     background-color: #158c00;
     text-shadow: #202020 1px 1px;
     padding: 1rem 2rem;
     border-radius: 0.4rem;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 600;
 }
 
@@ -131,23 +133,22 @@ h2 {
     border-radius: 0.4rem;
     text-align: left;
     position: relative;
+    cursor: pointer;
 }
 
-.contact-div .content {
-    transition: filter 0.3s ease;
-}
-
-.contact-div:hover .content {
-    filter: blur(0.1rem) drop-shadow(0 0 0.1rem rgb(255, 119, 119));
+.contact-div:hover  {
+    filter: drop-shadow(0 0 0.1rem #8a0000);
+    transform: scale(1.01);    
 }
 
 .contact-div:hover::after {
     content: "Delete";
+    font-size: 2rem;
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 20%;
+    right: -5%;
     transform: translate(-50%, -50%);
-    z-index: 2;
     color: #ff0000;
     font-weight: bold;
+    text-shadow: #202020 0.2rem 0.2rem;
 }

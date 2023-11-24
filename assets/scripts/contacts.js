@@ -52,7 +52,8 @@ class Contact {
     if (!(other instanceof Contact)) {
       return false;
     }
-    return this.#email === other.email;
+    return this.#name.toLowerCase() === other.name.toLowerCase()
+      || this.#email.toLowerCase() === other.email.toLowerCase();
   }
 }
 

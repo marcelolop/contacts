@@ -5,21 +5,21 @@ import { onEvent, getElement, select, selectAll } from "./utility-functions.js";
 
 /*
 Directions and requirements
-• Create a web page with a form, a button, and a section for multiple contacts (see example).
-• Validate the user input (commas, email, etc.), providing expected error messages.
-• Create a class named Contact with 3 private data properties (name, city, email), a constructor,
-and 3 getters. Use ES modules and a server, so both your utility functions and Contact class 
-can be placed in separated files.
-• Create a new ‘contact’ (an instance of Contact) using name, city, and email as arguments.
-• Add the new contact object to an array.
-• Call a function - listContacts() - to display the contacts on your page. listContacts() will: iterate 
-through the array, create a div element, add the object’s data to three paragraphs, append 
-these paragraphs to the div you just created, and add the div to the HTML document.
+* Create a web page with a form, a button, and a section for multiple contacts (see example).
+* Validate the user input (commas, email, etc.), providing expected error messages.
+* Create a class named Contact with 3 private data properties (name, city, email), a constructor,
+* and 3 getters. Use ES modules and a server, so both your utility functions and Contact class 
+* can be placed in separated files.
+* Create a new ‘contact’ (an instance of Contact) using name, city, and email as arguments.
+* Add the new contact object to an array.
+* Call a function - listContacts() - to display the contacts on your page. listContacts() will: iterate 
+* through the array, create a div element, add the object’s data to three paragraphs, append 
+* these paragraphs to the div you just created, and add the div to the HTML document.
 * New contacts must be added to the beginning of the list.
 * Count and display the number of contacts added.
-• Implement a function to allow users delete a contact by clicking it.
-• You can use obtrusive JavaScript (onclick attribute) when adding your contacts to the page.
-• Add a README file to your repository on GitHub with a link to your application (the web page
+* Implement a function to allow users delete a contact by clicking it.
+* You can use obtrusive JavaScript (onclick attribute) when adding your contacts to the page.
+* Add a README file to your repository on GitHub with a link to your application (the web page
 */
 
 //Dom Elements
@@ -31,15 +31,11 @@ const contactCount = getElement("count");
 
 let contacts = []; // Array of contacts
 
-function validateFieldsLength(contactInfo) {
-  const fields = contactInfo.split(",");
-
-  for (const field of fields) {
-    if (field.trim().length < 3) {
-      return false;
-    }
+function validateWithRegex(value, regex, minLength, errorMessage) {
+  if (value.length < minLength || !regex.test(value)) {
+    displayError(errorMessage);
+    return false;
   }
-
   return true;
 }
 
@@ -47,7 +43,16 @@ function validateContactInfo() {
   const contactInfo = contactInput.value.split(",");
 
   if (contactInfo.length !== 3) {
-    displayError("Please enter name, city, and email separated by commas.");
+    let missingFields = "";
+    if (!contactInfo[0]) missingFields += "Name, ";
+    if (!contactInfo[1]) missingFields += "City, ";
+    if (!contactInfo[2]) missingFields += "Email, ";
+
+    missingFields = missingFields.slice(0, -2);
+
+    displayError(
+      `Please enter the following fields separated by commas: ${missingFields}`
+    );
     return null;
   }
 
@@ -55,27 +60,30 @@ function validateContactInfo() {
   const city = contactInfo[1].trim();
   let email = contactInfo[2].trim();
 
-  if (!/(^[A-Z][a-z]*)(\s[A-Z][a-z]*)*$/.test(name)) {
-    displayError(
-      "Each name must start with a capital letter and contain only letters and spaces."
-    );
-    return null;
-  }
+  const nameValid = validateWithRegex(
+    name,
+    /(^[A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
+    2,
+    "Each name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
+  );
+  if (!nameValid) return null;
 
-  if (!/(^[A-Z][a-z]*)(\s[A-Z][a-z]*)*$/.test(city)) {
-    displayError(
-      "Each city name must start with a capital letter and contain only letters and spaces."
-    );
-    return null;
-  }
+  const cityValid = validateWithRegex(
+    city,
+    /(^[A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
+    3,
+    "Each city name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
+  );
+  if (!cityValid) return null;
 
   email = email.toLowerCase();
-  if (!/^[\w.-]+@[a-z_-]+?\.[a-z]{2,3}$/.test(email)) {
-    displayError(
-      "Please enter a valid email. Email should not contain uppercase letters."
-    );
-    return null;
-  }
+  const emailValid = validateWithRegex(
+    email,
+    /^[\w.-]+@[a-z_-]+?\.[a-z]{2,3}$/,
+    3,
+    "Please enter a valid email. Email should not contain uppercase letters and be at least 3 characters long."
+  );
+  if (!emailValid) return null;
 
   return { name, city, email };
 }
@@ -88,13 +96,18 @@ function displayError(message) {
   setTimeout(() => {
     contactInput.classList.remove("invalid");
     errorMessage.textContent = "";
-  }, 4000);
+  }, 3000);
 }
 
 function createContactElement(contact, index) {
   const div = document.createElement("div");
   div.className = "contact-div";
   div.dataset.index = index;
+
+  // Add onclick event to delete the contact when clicked
+  div.onclick = function () {
+    deleteContact(index);
+  };
 
   const contentDiv = document.createElement("div");
   contentDiv.className = "content";
@@ -130,15 +143,24 @@ function listContacts() {
 }
 
 function contactExists(name, city, email) {
-  return contacts.some((contact) => {
-    return contact.name.toLowerCase() === name.toLowerCase() &&
-      contact.city.toLowerCase() === city.toLowerCase() &&
-      contact.email.toLowerCase() === email.toLowerCase();
+  const duplicateFields = [];
+  contacts.forEach((contact) => {
+    if (contact.name.toLowerCase() === name.toLowerCase()) {
+      if (!duplicateFields.includes("Name")) {
+        duplicateFields.push("Name");
+      }
+    }
+    if (contact.email.toLowerCase() === email.toLowerCase()) {
+      if (!duplicateFields.includes("Email")) {
+        duplicateFields.push("Email");
+      }
+    }
   });
+  return duplicateFields;
 }
 
 function updateContactCount() {
-  contactCount.textContent = `Contact count: ${contacts.length}`;
+  contactCount.textContent = `Contacts Saved: ${contacts.length}`;
 }
 
 function deleteContact(event) {
@@ -160,8 +182,16 @@ onEvent("click", addContactBtn, function () {
   const contactInfo = validateContactInfo();
 
   if (contactInfo) {
-    if (contactExists(contactInfo.name, contactInfo.city, contactInfo.email)) {
-      errorMessage.textContent = "This contact already exists in the list.";
+    const duplicateFields = contactExists(
+      contactInfo.name,
+      contactInfo.city,
+      contactInfo.email
+    );
+
+    if (duplicateFields.length > 0) {
+      errorMessage.textContent = `One or more fields already exist in other contacts on the list. The duplicate field(s) is/are: ${duplicateFields.join(
+        ", "
+      )}. `;
       errorMessage.style.color = "red";
       // Remove the error message after 3 seconds
       setTimeout(() => {
