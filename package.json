@@ -1,0 +1,22 @@
+{
+  "name": "contacts",
+  "version": "1.0.0",
+  "description": "contacts app ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lite-server"
+  },
+  "keywords": [
+    "node",
+    "modules",
+    "JavasScript",
+    "HTML",
+    "CSS"
+  ],
+  "author": "Marcelo Lopes",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
