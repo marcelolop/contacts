@@ -37,7 +37,7 @@ function validateContactInfo(contactInputValue) {
     2,
     "Each name must start with a capital letter, contain only letters and spaces, and be at least 2 characters long."
   );
-  if (typeof nameValid === 'string') return { error: nameValid };
+  if (typeof nameValid === "string") return { error: nameValid };
 
   if (!city) return { error: "Please enter a city." };
   const cityValid = validateWithRegex(
@@ -46,7 +46,7 @@ function validateContactInfo(contactInputValue) {
     3,
     "Each city name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
   );
-  if (typeof cityValid === 'string') return { error: cityValid };
+  if (typeof cityValid === "string") return { error: cityValid };
 
   if (!email) return { error: "Please enter an email." };
   const emailValid = validateWithRegex(
@@ -55,20 +55,10 @@ function validateContactInfo(contactInputValue) {
     3,
     "Please enter a valid email. Email should not contain uppercase letters and be at least 3 characters long."
   );
-  if (typeof emailValid === 'string') return { error: emailValid };
+  if (typeof emailValid === "string") return { error: emailValid };
+  
 
   return { name, city, email };
-}
-
-function displayError(message) {
-  contactInput.classList.add("invalid");
-  errorMessage.textContent = message;
-  errorMessage.style.color = "red";
-
-  setTimeout(() => {
-    contactInput.classList.remove("invalid");
-    errorMessage.textContent = "";
-  }, 3000);
 }
 
 function createContactElement(contact, index) {
@@ -157,7 +147,10 @@ function deleteContact(event) {
 onEvent("click", contactList, deleteContact);
 
 onEvent("click", addContactBtn, function () {
-  const contactInfo = validateContactInfo(contactInput.value);
+  let contactInputValue = contactInput.value;
+  const [name, city, email] = contactInputValue.split(",").map((s) => s.trim());
+  contactInputValue = `${name}, ${city}, ${email.toLowerCase()}`;
+  const contactInfo = validateContactInfo(contactInputValue);
 
   if (contactInfo.error) {
     errorMessage.textContent = contactInfo.error;
