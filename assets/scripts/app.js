@@ -42,7 +42,7 @@ function validateContactInfo(contactInputValue) {
   if (!city) return { error: "Please enter a city." };
   const cityValid = validateWithRegex(
     city,
-    /(^[A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
+    /(^[A-Z][a-z]*(\s[A-Z][a-z]*)*)$/,
     3,
     "Each city name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
   );
