@@ -28,7 +28,7 @@ function validateWithRegex(value, regex, minLength, errorMessage) {
 }
 
 function validateContactInfo(contactInputValue) {
-  const [name, city, email] = contactInputValue.split(",").map((s) => s.trim());
+  const [name, city, email] = contactInputValue.split(",").map((inputField) => inputField.trim());
 
   if (!name) return { error: "Please enter a name." };
   const nameValid = validateWithRegex(
