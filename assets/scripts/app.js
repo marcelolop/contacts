@@ -1,7 +1,7 @@
 "use strict";
 
-import { Contact } from "./contacts.js";
-import { onEvent, getElement, select, selectAll } from "./utility-functions.js";
+import { Contact } from "./classes/contacts.js";
+import { onEvent, getElement, select } from "./utils/general.js";
 
 /*
 Directions and requirements
@@ -31,16 +31,24 @@ const contactCount = getElement("count");
 
 let contacts = []; // Array of contacts
 
+/**
+ * Checks if a value matches a regex and has a minimum length
+ * @param {*} value
+ * @param {*} regex
+ * @param {number} minLength
+ * @param {string} errorMessage
+ * @returns true if the value matches the regex and has a minimum length, false otherwise.
+ */
 function validateWithRegex(value, regex, minLength, errorMessage) {
   if (value.length < minLength || !regex.test(value)) {
     displayError(errorMessage);
     return false;
   }
   return true;
-}
+} // Utility function
 
-function validateContactInfo() {
-  const contactInfo = contactInput.value.split(",");
+function validateContactInfo(contactInputValue) {
+  const contactInfo = contactInputValue.split(",");
 
   if (contactInfo.length !== 3) {
     let missingFields = "";
@@ -50,10 +58,9 @@ function validateContactInfo() {
 
     missingFields = missingFields.slice(0, -2);
 
-    displayError(
-      `Please enter the following fields separated by commas: ${missingFields}`
-    );
-    return null;
+    return {
+      error: `Please enter the following fields separated by commas: ${missingFields}`,
+    };
   }
 
   const name = contactInfo[0].trim();
@@ -66,7 +73,7 @@ function validateContactInfo() {
     2,
     "Each name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
   );
-  if (!nameValid) return null;
+  if (!nameValid) return { error: "Invalid name" };
 
   const cityValid = validateWithRegex(
     city,
@@ -74,7 +81,7 @@ function validateContactInfo() {
     3,
     "Each city name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
   );
-  if (!cityValid) return null;
+  if (!cityValid) return { error: "Invalid city" };
 
   email = email.toLowerCase();
   const emailValid = validateWithRegex(
@@ -83,7 +90,7 @@ function validateContactInfo() {
     3,
     "Please enter a valid email. Email should not contain uppercase letters and be at least 3 characters long."
   );
-  if (!emailValid) return null;
+  if (!emailValid) return { error: "Invalid email" };
 
   return { name, city, email };
 }
@@ -103,7 +110,7 @@ function createContactElement(contact, index) {
   const div = document.createElement("div");
   div.className = "contact-div";
   div.dataset.index = index;
-
+  console.log(contact);
   // Add onclick event to delete the contact when clicked
   div.onclick = function () {
     deleteContact(index);
@@ -142,7 +149,14 @@ function listContacts() {
   }
 }
 
-function contactExists(name, city, email) {
+/**
+ * Checks if a contact already exists in the list of contacts
+ * @param {[]} contacts
+ * @param {string} name
+ * @param {string} email
+ * @returns an array of duplicate fields (name, email, or both)
+ */
+function contactExists(contacts, name, email) {
   const duplicateFields = [];
   contacts.forEach((contact) => {
     if (contact.name.toLowerCase() === name.toLowerCase()) {
@@ -179,12 +193,14 @@ function deleteContact(event) {
 onEvent("click", contactList, deleteContact);
 
 onEvent("click", addContactBtn, function () {
-  const contactInfo = validateContactInfo();
+  const contactInfo = validateContactInfo(contactInput.value);
 
-  if (contactInfo) {
+  console.log(contactInfo);
+
+  if (!contactInfo.error) {
     const duplicateFields = contactExists(
+      contacts,
       contactInfo.name,
-      contactInfo.city,
       contactInfo.email
     );
 

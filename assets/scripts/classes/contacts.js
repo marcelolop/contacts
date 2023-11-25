@@ -32,6 +32,7 @@ class Contact {
     }
     this.#email = email;
   }
+  
   get name() {
     return this.#name;
   }
@@ -49,12 +50,12 @@ class Contact {
   }
 
   equals(other) {
-    if (!(other instanceof Contact)) {
-      return false;
-    }
-    return this.#name.toLowerCase() === other.name.toLowerCase()
-      || this.#email.toLowerCase() === other.email.toLowerCase();
+  if (!(other instanceof Contact)) {
+    return false;
   }
+  return this.#name.toLowerCase() === other.name.toLowerCase()
+    || this.#email.toLowerCase() === other.email.toLowerCase();
+}
 }
 
 export { Contact }; // Export the Contact class
