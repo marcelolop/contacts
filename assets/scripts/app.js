@@ -42,21 +42,24 @@ function validateContactInfo(contactInputValue) {
   if (!city) return { error: "Please enter a city." };
   const cityValid = validateWithRegex(
     city,
-    /(^[A-Z][a-z]*(\s[A-Z][a-z]*)*)$/,
+    /^([A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
     3,
     "Each city name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
   );
   if (typeof cityValid === "string") return { error: cityValid };
 
   if (!email) return { error: "Please enter an email." };
+  if (email !== email.toLowerCase())
+    return { error: "Email should not contain uppercase letters." };
   const emailValid = validateWithRegex(
     email,
     /^[\w.-]+@[a-z_-]+?\.[a-z]{2,3}$/,
     3,
-    "Please enter a valid email. Email should not contain uppercase letters and be at least 3 characters long."
+    "Please enter a valid email. Email should be at least 3 characters long."
   );
   if (typeof emailValid === "string") return { error: emailValid };
   
+  if (typeof emailValid === "string") return { error: emailValid };
 
   return { name, city, email };
 }
@@ -199,3 +202,4 @@ onEvent("click", contactList, function (event) {
     updateContactCount();
   }
 });
+ 
