@@ -22,56 +22,40 @@ let contacts = []; // Array of contacts
  */
 function validateWithRegex(value, regex, minLength, errorMessage) {
   if (value.length < minLength || !regex.test(value)) {
-    displayError(errorMessage);
-    return false;
+    return errorMessage;
   }
   return true;
-} // Utility function
+}
 
 function validateContactInfo(contactInputValue) {
-  const contactInfo = contactInputValue.split(",");
+  const [name, city, email] = contactInputValue.split(",").map((s) => s.trim());
 
-  if (contactInfo.length !== 3) {
-    let missingFields = "";
-    if (!contactInfo[0]) missingFields += "Name, ";
-    if (!contactInfo[1]) missingFields += "City, ";
-    if (!contactInfo[2]) missingFields += "Email, ";
-
-    missingFields = missingFields.slice(0, -2);
-
-    return {
-      error: `Please enter the following fields separated by commas: ${missingFields}`,
-    };
-  }
-
-  const name = contactInfo[0].trim();
-  const city = contactInfo[1].trim();
-  let email = contactInfo[2].trim();
-
+  if (!name) return { error: "Please enter a name." };
   const nameValid = validateWithRegex(
     name,
     /(^[A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
     2,
-    "Each name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
+    "Each name must start with a capital letter, contain only letters and spaces, and be at least 2 characters long."
   );
-  if (!nameValid) return { error: "Invalid name" };
+  if (typeof nameValid === 'string') return { error: nameValid };
 
+  if (!city) return { error: "Please enter a city." };
   const cityValid = validateWithRegex(
     city,
     /(^[A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
     3,
     "Each city name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
   );
-  if (!cityValid) return { error: "Invalid city" };
+  if (typeof cityValid === 'string') return { error: cityValid };
 
-  email = email.toLowerCase();
+  if (!email) return { error: "Please enter an email." };
   const emailValid = validateWithRegex(
     email,
     /^[\w.-]+@[a-z_-]+?\.[a-z]{2,3}$/,
     3,
     "Please enter a valid email. Email should not contain uppercase letters and be at least 3 characters long."
   );
-  if (!emailValid) return { error: "Invalid email" };
+  if (typeof emailValid === 'string') return { error: emailValid };
 
   return { name, city, email };
 }
@@ -91,7 +75,6 @@ function createContactElement(contact, index) {
   const div = document.createElement("div");
   div.className = "contact-div";
   div.dataset.index = index;
-  console.log(contact);
   // Add onclick event to delete the contact when clicked
   div.onclick = function () {
     deleteContact(index);
@@ -176,36 +159,41 @@ onEvent("click", contactList, deleteContact);
 onEvent("click", addContactBtn, function () {
   const contactInfo = validateContactInfo(contactInput.value);
 
-  console.log(contactInfo);
+  if (contactInfo.error) {
+    errorMessage.textContent = contactInfo.error;
+    errorMessage.style.color = "red";
+    setTimeout(() => {
+      errorMessage.textContent = "";
+      contactInput.classList.remove("invalid");
+    }, 4000);
+    return;
+  }
 
-  if (!contactInfo.error) {
-    const duplicateFields = contactExists(
-      contacts,
+  const duplicateFields = contactExists(
+    contacts,
+    contactInfo.name,
+    contactInfo.email
+  );
+
+  if (duplicateFields.length > 0) {
+    errorMessage.textContent = `One or more fields already exist in other contacts on the list. The duplicate field(s) is/are: ${duplicateFields.join(
+      ", "
+    )}. `;
+    errorMessage.style.color = "red";
+    setTimeout(() => {
+      errorMessage.textContent = "";
+      contactInput.classList.remove("invalid");
+    }, 4000);
+  } else {
+    const contact = new Contact(
       contactInfo.name,
+      contactInfo.city,
       contactInfo.email
     );
-
-    if (duplicateFields.length > 0) {
-      errorMessage.textContent = `One or more fields already exist in other contacts on the list. The duplicate field(s) is/are: ${duplicateFields.join(
-        ", "
-      )}. `;
-      errorMessage.style.color = "red";
-      // Remove the error message after 3 seconds
-      setTimeout(() => {
-        errorMessage.textContent = "";
-        contactInput.classList.remove("invalid");
-      }, 4000);
-    } else {
-      const contact = new Contact(
-        contactInfo.name,
-        contactInfo.city,
-        contactInfo.email
-      );
-      contacts.unshift(contact);
-      listContacts();
-      updateContactCount();
-      errorMessage.textContent = "";
-    }
+    contacts.unshift(contact);
+    listContacts();
+    updateContactCount();
+    errorMessage.textContent = "";
   }
 });
 
