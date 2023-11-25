@@ -191,7 +191,7 @@ onEvent("click", addContactBtn, function () {
 });
 
 onEvent("click", contactList, function (event) {
-  if (event.target.tagName === "LI") {
+  if (event.target.tagName === "DIV") {
     contacts = contacts.filter(
       (contact) => createContactElement(contact) !== event.target
     );
