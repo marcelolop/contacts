@@ -58,8 +58,6 @@ function validateContactInfo(contactInputValue) {
     "Please enter a valid email. Email should be at least 3 characters long."
   );
   if (typeof emailValid === "string") return { error: emailValid };
-  
-  if (typeof emailValid === "string") return { error: emailValid };
 
   return { name, city, email };
 }
@@ -150,10 +148,7 @@ function deleteContact(event) {
 onEvent("click", contactList, deleteContact);
 
 onEvent("click", addContactBtn, function () {
-  let contactInputValue = contactInput.value;
-  const [name, city, email] = contactInputValue.split(",").map((s) => s.trim());
-  contactInputValue = `${name}, ${city}, ${email.toLowerCase()}`;
-  const contactInfo = validateContactInfo(contactInputValue);
+  const contactInfo = validateContactInfo(contactInput.value);
 
   if (contactInfo.error) {
     errorMessage.textContent = contactInfo.error;
@@ -194,7 +189,7 @@ onEvent("click", addContactBtn, function () {
 });
 
 onEvent("click", contactList, function (event) {
-  if (event.target.tagName === "DIV") {
+  if (event.target.tagName === "LI") {
     contacts = contacts.filter(
       (contact) => createContactElement(contact) !== event.target
     );
