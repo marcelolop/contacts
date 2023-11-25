@@ -3,25 +3,6 @@
 import { Contact } from "./classes/contacts.js";
 import { onEvent, getElement, select } from "./utils/general.js";
 
-/*
-Directions and requirements
-* Create a web page with a form, a button, and a section for multiple contacts (see example).
-* Validate the user input (commas, email, etc.), providing expected error messages.
-* Create a class named Contact with 3 private data properties (name, city, email), a constructor,
-* and 3 getters. Use ES modules and a server, so both your utility functions and Contact class 
-* can be placed in separated files.
-* Create a new ‘contact’ (an instance of Contact) using name, city, and email as arguments.
-* Add the new contact object to an array.
-* Call a function - listContacts() - to display the contacts on your page. listContacts() will: iterate 
-* through the array, create a div element, add the object’s data to three paragraphs, append 
-* these paragraphs to the div you just created, and add the div to the HTML document.
-* New contacts must be added to the beginning of the list.
-* Count and display the number of contacts added.
-* Implement a function to allow users delete a contact by clicking it.
-* You can use obtrusive JavaScript (onclick attribute) when adding your contacts to the page.
-* Add a README file to your repository on GitHub with a link to your application (the web page
-*/
-
 //Dom Elements
 const contactInput = getElement("contact-info");
 const addContactBtn = select(".add-button");
