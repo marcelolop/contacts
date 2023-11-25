@@ -49,6 +49,7 @@ function validateContactInfo(contactInputValue) {
   if (typeof cityValid === 'string') return { error: cityValid };
 
   if (!email) return { error: "Please enter an email." };
+  email = email.toLowerCase();
   const emailValid = validateWithRegex(
     email,
     /^[\w.-]+@[a-z_-]+?\.[a-z]{2,3}$/,
