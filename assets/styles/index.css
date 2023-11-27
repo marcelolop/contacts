@@ -43,6 +43,7 @@ h2 {
     height: 2rem;
     text-align: left;
     font-size: 1.8rem;
+    margin-bottom: 2rem;
 }
 
 #error-message {
@@ -142,13 +143,14 @@ h2 {
 }
 
 .contact-div:hover::after {
-    content: "Delete";
+    content: "\f1f8";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
     font-size: 2rem;
     position: absolute;
     top: 20%;
-    right: -5%;
+    right: 0%;
     transform: translate(-50%, -50%);
     color: #ff0000;
-    font-weight: bold;
     text-shadow: #202020 0.2rem 0.2rem;
 }

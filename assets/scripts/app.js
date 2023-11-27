@@ -35,7 +35,7 @@ function validateContactInfo(contactInputValue) {
     name,
     /(^[A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
     2,
-    "Each name must start with a capital letter, contain only letters and spaces, and be at least 2 characters long."
+    "Names must start with a capital letter, contain only letters and spaces, and be at least 2 characters long."
   );
   if (typeof nameValid === "string") return { error: nameValid };
 
@@ -44,7 +44,7 @@ function validateContactInfo(contactInputValue) {
     city,
     /^([A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
     3,
-    "Each city name must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
+    "City names must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
   );
   if (typeof cityValid === "string") return { error: cityValid };
 
@@ -129,7 +129,7 @@ function contactExists(contacts, name, email) {
 }
 
 function updateContactCount() {
-  contactCount.textContent = `Saved Contacts: ${contacts.length}`;
+  contactCount.textContent = `Saved contacts: ${contacts.length}`;
 }
 
 function deleteContact(event) {
@@ -167,7 +167,7 @@ onEvent("click", addContactBtn, function () {
   );
 
   if (duplicateFields.length > 0) {
-    errorMessage.textContent = `One or more fields already exist in other contacts on the list. The duplicate field(s) is/are: ${duplicateFields.join(
+    errorMessage.textContent = `One or more fields already exists: ${duplicateFields.join(
       ", "
     )}. `;
     errorMessage.style.color = "red";
