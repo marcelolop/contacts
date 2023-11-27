@@ -129,7 +129,7 @@ function contactExists(contacts, name, email) {
 }
 
 function updateContactCount() {
-  contactCount.textContent = `Contacts Saved: ${contacts.length}`;
+  contactCount.textContent = `Saved Contacts: ${contacts.length}`;
 }
 
 function deleteContact(event) {
