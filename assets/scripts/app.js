@@ -1,6 +1,6 @@
 "use strict";
 
-import { Contact } from "./classes/contacts.js";
+import { Contact } from "./classes/Contact.js";
 import { onEvent, getElement, select } from "./utils/general.js";
 
 //Dom Elements
