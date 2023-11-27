@@ -35,7 +35,7 @@ function validateContactInfo(contactInputValue) {
     name,
     /(^[A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
     2,
-    "Names must start with a capital letter, contain only letters and spaces, and be at least 2 characters long."
+    "Please insert a name in the valid format, e.g. 'John Smith'."
   );
   if (typeof nameValid === "string") return { error: nameValid };
 
@@ -44,7 +44,7 @@ function validateContactInfo(contactInputValue) {
     city,
     /^([A-Z][a-z]*)(\s[A-Z][a-z]*)*$/,
     3,
-    "City names must start with a capital letter, contain only letters and spaces, and be at least 3 characters long."
+    "Please insert a city in the valid format, e.g. 'New York'."
   );
   if (typeof cityValid === "string") return { error: cityValid };
 
@@ -55,7 +55,7 @@ function validateContactInfo(contactInputValue) {
     email,
     /^[\w.-]+@[a-z_-]+?\.[a-z]{2,3}$/,
     3,
-    "Please enter a valid email. Email should be at least 3 characters long."
+    "Please insert an email in the valid format, e.g. 'example@domain.com'."
   );
   if (typeof emailValid === "string") return { error: emailValid };
 
